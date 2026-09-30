@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#f5f4ef">
+	<title>FitBuddy | Training, made personal</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--ink: #202822; --muted: #70796f; --paper: #f5f4ef;
+			--white: #fffefa; --green: #315f46; --lime: #d7e69b; --line: #e1e3d9;
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+		button, input, select { font: inherit; }
+		.topbar { height: 70px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 max(28px, calc((100vw - 1160px) / 2)); background: rgba(255,254,250,.8); }
+		.brand { display: flex; align-items: center; gap: 10px; font: 800 19px Manrope, sans-serif; }
+		.brand-mark { display: grid; place-items: center; width: 30px; height: 30px; background: var(--green); color: var(--lime); border-radius: 9px; font-size: 18px; }
+		.top-meta { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+		.pulse { width: 8px; height: 8px; background: #78a76b; border-radius: 50%; }
+		main { max-width: 1160px; margin: 0 auto; padding: 52px 28px 64px; }
+		.intro { display: flex; justify-content: space-between; align-items: end; margin-bottom: 28px; gap: 20px; }
+		.eyebrow { color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin: 0 0 11px; }
+		h1, h2, h3, p { margin-top: 0; }
+		h1 { font: 800 clamp(30px, 4vw, 43px)/1.1 Manrope, sans-serif; margin-bottom: 9px; }
+		.intro p { margin-bottom: 0; color: var(--muted); font-size: 15px; }
+		.week-chip { padding: 10px 13px; border: 1px solid var(--line); border-radius: 7px; color: #536052; font-size: 12px; white-space: nowrap; background: #fbfaf6; }
+		.workspace { display: grid; grid-template-columns: 340px minmax(0, 1fr); border: 1px solid var(--line); background: var(--white); border-radius: 8px; min-height: 510px; overflow: hidden; box-shadow: 0 14px 38px rgba(37,51,39,.045); }
+		.form-panel { padding: 25px 24px; border-right: 1px solid var(--line); background: #fbfaf6; }
+		.section-head, .result-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+		.section-head { margin-bottom: 22px; }
+		.section-head h2, .result-top h2 { font: 700 15px Manrope, sans-serif; margin: 0; }
+		.step { font-size: 11px; color: var(--muted); }
+		label { display: block; margin: 17px 0 7px; font-size: 12px; font-weight: 700; color: #465047; }
+		input, select { width: 100%; height: 43px; border: 1px solid #dfe2d8; border-radius: 5px; background: var(--white); padding: 0 12px; color: var(--ink); outline: none; font-size: 13px; }
+		input:focus, select:focus { border-color: #63856c; box-shadow: 0 0 0 3px rgba(49,95,70,.1); }
+		.field-note { font-size: 11px; color: var(--muted); margin: 7px 0 0; line-height: 1.45; }
+		.submit { width: 100%; height: 45px; margin-top: 24px; border: 0; border-radius: 5px; background: var(--green); color: white; font-weight: 700; font-size: 13px; cursor: pointer; transition: background .18s, transform .18s; }
+		.submit:hover { background: #254c37; transform: translateY(-1px); }
+		.submit:disabled { opacity: .65; cursor: wait; transform: none; }
+		.privacy { font-size: 10px; line-height: 1.5; color: #868c82; text-align: center; margin: 11px 0 0; }
+		.result-panel { padding: 25px 28px; min-width: 0; }
+		.result-top { padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+		.tag { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--green); background: #eff3e2; padding: 7px 9px; border-radius: 4px; }
+		.empty { min-height: 390px; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); padding: 35px; }
+		.empty-symbol { margin: 0 auto 14px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px; background: #edf1e4; color: var(--green); font-size: 24px; }
+		.empty h3 { font: 700 16px Manrope, sans-serif; color: var(--ink); margin-bottom: 7px; }
+		.empty p { font-size: 13px; line-height: 1.6; max-width: 270px; margin: 0 auto; }
+		.plan-heading { padding: 19px 0 16px; }
+		.plan-heading h3 { font: 800 21px Manrope, sans-serif; margin-bottom: 6px; }
+		.plan-heading p { color: var(--muted); font-size: 13px; line-height: 1.55; margin: 0; }
+		.days { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+		.day { border: 1px solid var(--line); border-radius: 6px; padding: 14px 15px; background: var(--white); animation: arrive .3s both; }
+		.day:nth-child(2) { animation-delay: .04s; } .day:nth-child(3) { animation-delay: .08s; } .day:nth-child(4) { animation-delay: .12s; }
+		.day-head { display: flex; gap: 10px; align-items: start; margin-bottom: 9px; }
+		.day-num { display: grid; place-items: center; width: 23px; height: 23px; flex: 0 0 23px; border-radius: 7px; background: #edf1e4; color: var(--green); font-size: 11px; font-weight: 700; }
+		.day h4 { font: 700 12px Manrope, sans-serif; margin: 2px 0 3px; }
+		.day .focus { font-size: 11px; color: var(--muted); margin: 0; }
+		.day ul { list-style: none; margin: 0; padding: 0; }
+		.day li { font-size: 11px; line-height: 1.45; padding: 7px 0; border-top: 1px solid #eff0e9; color: #505b52; }
+		.history { margin-top: 29px; }
+		.history-title { font: 700 13px Manrope, sans-serif; margin: 0 0 12px; }
+		.history-list { display: flex; gap: 9px; overflow: auto; padding-bottom: 3px; }
+		.history-item { flex: 0 0 190px; border: 1px solid var(--line); background: var(--white); border-radius: 6px; padding: 12px 14px; cursor: pointer; text-align: left; color: var(--ink); }
+		.history-item:hover { border-color: #9cac91; }
+		.history-item strong { display: block; font-size: 12px; margin-bottom: 5px; }
+		.history-item span { font-size: 10px; color: var(--muted); }
+		.notice { font-size: 12px; color: #a14132; margin: 20px; }
+		footer { max-width: 1160px; margin: 0 auto; padding: 0 28px 25px; color: #878d83; font-size: 11px; display: flex; justify-content: space-between; gap: 15px; }
+		@keyframes arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+		@media (max-width: 760px) { .topbar { padding: 0 18px; height: 62px; } main { padding: 34px 16px 42px; } .intro { align-items: start; flex-direction: column; } .workspace { grid-template-columns: 1fr; } .form-panel { border-right: 0; border-bottom: 1px solid var(--line); } .result-panel { padding: 22px 18px; } .days { grid-template-columns: 1fr; } .empty { min-height: 270px; } footer { padding: 0 16px 20px; flex-direction: column; } }
+		@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+	</style>
+</head>
+<body>
+	<header class="topbar"><div class="brand"><span class="brand-mark">+</span>fitbuddy</div><div class="top-meta"><span class="pulse"></span>Your training space</div></header>
+	<main>
+		<section class="intro"><div><p class="eyebrow">A little more you, every week</p><h1>Make your next move.</h1><p>Build a training plan around your goals, schedule, and setup.</p></div><div class="week-chip">◷ &nbsp; Plans saved on this device</div></section>
+		<section class="workspace" aria-label="Workout plan builder">
+			<form class="form-panel" id="plan-form">
+				<div class="section-head"><h2>Your training profile</h2><span class="step">01 / BUILD</span></div>
+				<label for="goal">Main goal</label><input id="goal" name="goal" value="Build strength" minlength="3" maxlength="80" required>
+				<p class="field-note">Be specific, or keep it simple. For example: improve cardio.</p>
+				<label for="level">Experience level</label><select id="level" name="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
+				<label for="training_days">Training days per week</label><select id="training_days" name="training_days"><option value="3">3 days</option><option value="4" selected>4 days</option><option value="5">5 days</option><option value="6">6 days</option></select>
+				<label for="equipment">Equipment available</label><input id="equipment" name="equipment" value="Dumbbells and bodyweight" minlength="2" maxlength="100" required>
+				<button class="submit" id="submit" type="submit">Create my plan <span aria-hidden="true">↗</span></button>
+				<p class="privacy">Plans are stored in this project’s SQLite database.</p>
+			</form>
+			<section class="result-panel" aria-live="polite"><div class="result-top"><h2>Your weekly plan</h2><span class="tag" id="plan-tag">READY WHEN YOU ARE</span></div><div id="plan-result" class="empty"><div><div class="empty-symbol">⌁</div><h3>Your week, thoughtfully mapped</h3><p>Set your training preferences and create a plan to see your sessions here.</p></div></div></section>
+		</section>
+		{% if plans %}
+		<section class="history"><h2 class="history-title">Recent plans</h2><div class="history-list">{% for item in plans %}<button class="history-item" type="button" data-plan-id="{{ item.id }}"><strong>{{ item.plan.title }}</strong><span>{{ item.training_days }} days · {{ item.level }} · {{ item.created_at[:10] }}</span></button>{% endfor %}</div></section>
+		{% endif %}
+	</main>
+	<footer><span>FITBUDDY / SMALL STEPS, REAL STRENGTH</span><span>Move at your own pace. Rest is part of the plan.</span></footer>
+	<script>
+		const form = document.querySelector('#plan-form');
+		const result = document.querySelector('#plan-result');
+		const submit = document.querySelector('#submit');
+		const tag = document.querySelector('#plan-tag');
+
+		function renderPlan(item, aiGenerated = false) {
+			const plan = item.plan;
+			tag.textContent = aiGenerated ? 'AI PERSONALIZED' : 'STARTER PLAN';
+			const heading = document.createElement('div');
+			heading.className = 'plan-heading';
+			const title = document.createElement('h3');
+			title.textContent = plan.title;
+			const summary = document.createElement('p');
+			summary.textContent = plan.summary;
+			heading.append(title, summary);
+			const days = document.createElement('div');
+			days.className = 'days';
+			plan.days.forEach((day, index) => {
+				const article = document.createElement('article');
+				article.className = 'day';
+				const header = document.createElement('div');
+				header.className = 'day-head';
+				const number = document.createElement('span');
+				number.className = 'day-num';
+				number.textContent = String(index + 1).padStart(2, '0');
+				const details = document.createElement('div');
+				const name = document.createElement('h4');
+				name.textContent = day.name;
+				const focus = document.createElement('p');
+				focus.className = 'focus';
+				focus.textContent = day.focus;
+				details.append(name, focus);
+				header.append(number, details);
+				const list = document.createElement('ul');
+				day.exercises.forEach(exercise => {
+					const exerciseItem = document.createElement('li');
+					exerciseItem.textContent = exercise;
+					list.append(exerciseItem);
+				});
+				article.append(header, list);
+				days.append(article);
+			});
+			result.className = '';
+			result.replaceChildren(heading, days);
+		}
+
+		form.addEventListener('submit', async event => {
+			event.preventDefault();
+			submit.disabled = true;
+			submit.textContent = 'Building your plan…';
+			tag.textContent = 'WORKING';
+			try {
+				const response = await fetch('/api/plans', {
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify(Object.fromEntries(new FormData(form)))
+				});
+				const data = await response.json();
+				if (!response.ok) throw new Error(data.detail || 'Could not create your plan.');
+				renderPlan(data, data.ai_generated);
+				let history = document.querySelector('.history-list');
+				if (!history) {
+					window.location.reload();
+				} else {
+					const button = document.createElement('button');
+					button.className = 'history-item';
+					button.type = 'button';
+					button.dataset.planId = data.id;
+					button.innerHTML = `<strong></strong><span></span>`;
+					button.querySelector('strong').textContent = data.plan.title;
+					button.querySelector('span').textContent = `${data.training_days} days · ${data.level} · just now`;
+					history.prepend(button);
+					bindHistoryButton(button);
+				}
+			} catch (error) {
+				tag.textContent = 'TRY AGAIN';
+				result.className = 'empty';
+				const message = document.createElement('p');
+				message.className = 'notice';
+				message.textContent = error.message;
+				result.replaceChildren(message);
+			} finally {
+				submit.disabled = false;
+				submit.innerHTML = 'Create my plan <span aria-hidden="true">↗</span>';
+			}
+		});
+
+		function bindHistoryButton(button) {
+			button.addEventListener('click', async () => {
+				const response = await fetch(`/api/plans/${button.dataset.planId}`);
+				if (response.ok) renderPlan(await response.json());
+			});
+		}
+		document.querySelectorAll('[data-plan-id]').forEach(bindHistoryButton);
+	</script>
+</body>
+</html>
